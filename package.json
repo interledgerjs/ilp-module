@@ -32,7 +32,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "@types/debug": "0.0.30",
-    "ilp-logger": "^1.1.2",
     "source-map-support": "^0.5.9",
     "typescript": "^3.0.3"
   },
