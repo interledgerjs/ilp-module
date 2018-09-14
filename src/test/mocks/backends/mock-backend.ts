@@ -1,4 +1,4 @@
-import { AccountInfo, IlpBackend, BackendOptions, BackendServices } from "../../../main/backend";
+import { AccountInfo, IlpBackend, BackendOptions, BackendServices, SubmitPaymentParams } from "../../../main/backend";
 import { IlpLogger } from "../../../main/logger";
 require('source-map-support').install()
 
@@ -19,7 +19,7 @@ export default class MockBackend implements IlpBackend {
     getRate(sourceAccount: string, destinationAccount: string): Promise<number> {
         throw new Error("Method not implemented.");
     }
-    submitPayment(params: import("/Users/adrian/Github/interledgerjs/ilp-module/src/main/backend").SubmitPaymentParams): Promise<void> {
+    submitPayment(params: SubmitPaymentParams): Promise<void> {
         throw new Error("Method not implemented.");
     }
 }
