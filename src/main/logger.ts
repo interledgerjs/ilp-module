@@ -33,10 +33,10 @@ export const isValidInstance: ModuleTypeGuard<IlpLogger> = (logger: any): logger
 }
 
 export const loadDefaults: ModuleDefaultLoader = () => {
-  return [
-    'debug',
-    {
-      namespace: 'ilp'
-    }
-  ]
+  try {
+    require.resolve('debug')
+    return [ 'debug', { namespace: 'ilp' }]
+  } catch (e) {
+    return [ 'console', { namespace: 'ilp' }]
+  }
 }

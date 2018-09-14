@@ -45,8 +45,13 @@ export const isValidInstance: ModuleTypeGuard<IlpPlugin> = (plugin: any): plugin
     plugin.deregisterMoneyHandler !== undefined
 }
 export const loadDefaults: ModuleDefaultLoader = () => {
-  return [
-    'ilp-plugin-btp',
-    { server: `btp+ws://:${crypto.randomBytes(16).toString('hex')}@localhost:7768` }
-  ]
+  try {
+    require.resolve('ilp-plugin-btp')
+    return [
+      'ilp-plugin-btp',
+      { server: `btp+ws://:${crypto.randomBytes(16).toString('hex')}@localhost:7768` }
+    ]
+  } catch (e) {
+    return [ 'mirror', {} ]
+  }
 }
