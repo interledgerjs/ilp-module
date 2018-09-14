@@ -15,6 +15,55 @@ describe('ilp-module core functions', function () {
     delete(process.env['ILP_PLUGIN_OPTIONS'])
     delete(process.env['ILP_CUSTOM'])
     delete(process.env['ILP_CUSTOM_OPTIONS'])
+    delete(process.env['ILP_WIDGET'])
+    delete(process.env['ILP_WIDGET_OPTIONS'])
+  })
+
+  describe(`Load custom module type: createModule({custom})`, function () {
+
+    it('should load the named module', function () {
+      const widget = IlpModule.createModule('widget', 'mock-widget')
+      assert(widget.constructor.name === "MockWidget")
+    })
+
+    it('should load legacy module', function () {
+      const widget = IlpModule.createModule('widget', 'legacy-widget')
+      assert(widget.constructor.name === "LegacyWidget")
+    })
+
+
+    it('should throw an error if the provided module type is not known and no name provided', function () {
+      assert.throws(() => IlpModule.createModule('widget'))
+    })
+
+    it('should load the module named in env var ILP_<TYPE> if available', function () {
+      process.env['ILP_WIDGET'] = 'mock-widget'
+      const widget = IlpModule.createModule('widget')
+      assert(widget.constructor.name === "MockWidget")
+    })
+
+    it('should prefer the module named in parameters over the env var', function () {
+      process.env['ILP_WIDGET'] = 'custom-module'
+      const widget = IlpModule.createModule('widget', 'mock-widget')
+      assert(widget.constructor.name === "MockWidget")
+    })
+
+    it('should load the options in env var ILP_<TYPE>_OPTIONS if available', function () {
+      process.env['ILP_WIDGET'] = 'custom-module'
+      process.env['ILP_WIDGET_OPTIONS'] = '{"customOption":true}'
+      const widget = IlpModule.createModule('widget', 'mock-widget')
+      assert(widget.constructor.name === "MockWidget")
+      assert(widget.options.customOption)
+    })
+
+    it('should prefer the options named in parameters over the env var', function () {
+      process.env['ILP_CUSTOM'] = 'custom-module'
+      process.env['ILP_CUSTOM_OPTIONS'] = '{"customOption":true}'
+      const widget = IlpModule.createModule('widget', 'mock-widget', { customOption2: true })
+      assert(widget.constructor.name === "MockWidget")
+      assert(!widget.options.customOption)
+      assert(widget.options.customOption2)
+    })
   })
 
   describe(`resolveNameAndOptions`, function () {
