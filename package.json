@@ -16,7 +16,7 @@
     "build": "tsc",
     "lint": "tslint --project .",
     "pretest": "tsc --build && cp ./src/test/mocks/widgets/legacy-widget.js ./lib/test/mocks/widgets/legacy-widget.js",
-    "test": "nyc mocha --ui mocha-typescript --require source-map-support/register lib/test",
+    "test": "nyc mocha --ui mocha-typescript --require source-map-support/register --recursive lib/test",
     "doc": "typedoc --options typedoc.js src/main/index.ts",
     "codecov": "codecov",
     "preversion": "npm run lint && npm test",

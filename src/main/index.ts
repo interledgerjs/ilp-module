@@ -49,7 +49,7 @@ import ConsoleLogger from './loggers/console'
 export {
   AccountInfo, BackendOptions, BackendServices, IlpBackend
 }
-export const createBackend = (name?: string, options?: ModuleConstructorOptions, services?: ModuleServices) => {
+export const createBackend = (name?: string, options?: BackendOptions, services?: BackendServices) => {
   return createModule('backend', name, options, services) as IlpBackend
 }
 
@@ -71,6 +71,8 @@ export interface ModuleConstructorOptions {
 export interface ModuleServices {
   log: IlpLogger
   store?: IlpStore
+
+  [k: string]: any
 }
 export type ModuleConstructor = new (options: ModuleConstructorOptions, services?: ModuleServices) => any
 export type ModuleTypeGuard<T> = (instance: any) => instance is T
@@ -147,7 +149,7 @@ export function getFromEnvironment (type: string): [ string | undefined, ModuleC
  */
 export function resolveNameAndOptions (type: string, name?: string, options?: ModuleConstructorOptions): [ string, ModuleConstructorOptions ] {
 
-  const [ defaultName, defaultOptions ] = getFromDefaults(type) || [ undefined, undefined ]
+  const [ defaultName, defaultOptions ] = getFromDefaults(type)
   const [ envName, envOptions ] = getFromEnvironment(type)
 
   const moduleName = name || envName || defaultName
@@ -229,9 +231,7 @@ export function createModule (type: string | string, name?: string, options?: Mo
 
   // Create Logger service if required
   // TODO - Create other services as required for known types
-  const moduleServices =
-    services ||
-    (type !== 'logger') ? { log: createLogger(namespace) } : undefined
+  const moduleServices = (!services && type !== 'logger') ? { log: createLogger(namespace) } : services
 
   const instance = new IlpModule(constructorOptions, moduleServices)
   if (validateInstance(type, instance)) {

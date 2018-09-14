@@ -40,6 +40,10 @@ describe('Known types: plugin', function () {
       assert.throws(() => IlpModule.createModule('plugin', 'non-existent-module'))
     })
 
+    it('should throw an error if the provided module is invalid', function () {
+      assert.throws(() => IlpModule.createModule('plugin', 'invalid-plugin'))
+    })
+
     it('should load the named module', function () {
       const plugin = IlpModule.createModule('plugin', 'mock-plugin', { test: true})
       assert(plugin.constructor.name === "MockPlugin")
@@ -101,6 +105,10 @@ describe('Known types: plugin', function () {
 
     it('should throw an error if the provided module is not found', function () {
       assert.throws(() => IlpModule.createPlugin('non-existent-module'))
+    })
+
+    it('should throw an error if the provided module is invalid', function () {
+      assert.throws(() => IlpModule.createPlugin('invalid-plugin'))
     })
 
     it('should load the named module', function () {

@@ -31,6 +31,9 @@ describe('ilp-module core functions', function () {
       assert(widget.constructor.name === "LegacyWidget")
     })
 
+    it('should throw an error if the provided module is not a valid ILP module', function () {
+      assert.throws(() => IlpModule.createModule('widget', 'invalid-widget'))
+    })
 
     it('should throw an error if the provided module type is not known and no name provided', function () {
       assert.throws(() => IlpModule.createModule('widget'))
