@@ -1,0 +1,74 @@
+{
+  "name": "ilp-module",
+  "version": "1.0.0",
+  "description": "ILP module loader",
+  "main": "lib/main/index.js",
+  "types": "lib/main/index.d.ts",
+  "files": [
+    "src/main/**/*.ts",
+    "lib/main/**/*.js",
+    "lib/main/**/*.js.map",
+    "lib/main/**/*.d.ts",
+    "doc"
+  ],
+  "scripts": {
+    "clean": "rm -Rf .nyc_output && rm -Rf coverage && rm -Rf doc && rm -Rf lib ",
+    "build": "tsc",
+    "lint": "tslint --project .",
+    "pretest": "tsc --build",
+    "test": "nyc mocha --ui mocha-typescript --require source-map-support/register lib/test",
+    "doc": "typedoc --options typedoc.js src/main/index.ts",
+    "codecov": "codecov",
+    "preversion": "npm run lint && npm test",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags",
+    "prepublishOnly": "npm run lint && npm test && npm run doc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/interledgerjs/ilp-module.git"
+  },
+  "author": "Interledger Team <info@interledger.org>",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/debug": "0.0.30",
+    "ilp-logger": "^1.1.2",
+    "source-map-support": "^0.5.9",
+    "typescript": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/chai-as-promised": "^7.1.0",
+    "@types/mocha": "^5.2.5",
+    "@types/sinon": "^5.0.1",
+    "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
+    "codecov": "^3.0.2",
+    "ilp-plugin-btp": "^1.3.0",
+    "mocha": "^5.1.1",
+    "mocha-typescript": "^1.1.14",
+    "nyc": "^12.0.2",
+    "sinon": "^6.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^8.0.1",
+    "typedoc": "^0.12.0"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "lines": 80,
+    "statements": 80,
+    "functions": 80,
+    "branches": 80,
+    "include": [
+      "lib/main/**/*.js"
+    ],
+    "exclude": [
+      "lib/test/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "all": true
+  }
+}
