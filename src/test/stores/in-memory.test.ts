@@ -1,5 +1,4 @@
 import 'mocha'
-import * as path from 'path'
 import * as sinon from 'sinon'
 import * as Chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'

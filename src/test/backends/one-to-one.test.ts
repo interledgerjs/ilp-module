@@ -57,7 +57,7 @@ describe('Built-in modules: OneToOneBackend', function () {
         } : undefined
       }
     })
-    assert.eventually.equal(backend.getRate('alice','bob'), 100)
+    await Chai.expect(backend.getRate('alice','bob')).to.be.rejected
   })
 
   it('should throw with bad destination account data', async function () {
@@ -73,7 +73,7 @@ describe('Built-in modules: OneToOneBackend', function () {
         } : undefined
       }
     })
-    assert.eventually.equal(backend.getRate('alice','bob'), 100)
+    await Chai.expect(backend.getRate('alice','bob')).to.be.rejected
   })
   
   it('should noop for connect() and submitPayment()', async function () {

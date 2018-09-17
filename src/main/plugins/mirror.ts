@@ -7,8 +7,8 @@ require('source-map-support').install()
 export default class MirrorPlugin extends EventEmitter implements IlpPlugin {
   static version = 2
   private _connected = false
-  private _dataHandler: DataHandler
-  private _moneyHandler: MoneyHandler
+  private _dataHandler?: DataHandler
+  private _moneyHandler?: MoneyHandler
   protected _log: IlpLogger
   constructor (options: ModuleConstructorOptions, services: ModuleServices) {
     super()
@@ -18,11 +18,13 @@ export default class MirrorPlugin extends EventEmitter implements IlpPlugin {
   public connect (options?: PluginConnectOptions | undefined): Promise<void> {
     this._connected = true
     this._log.debug('Connected')
+    this.emit('connect')
     return Promise.resolve()
   }
   public disconnect (): Promise<void> {
     this._connected = false
     this._log.debug('Disconnected')
+    this.emit('disconnect')
     return Promise.resolve()
   }
   public isConnected (): boolean {
@@ -30,11 +32,17 @@ export default class MirrorPlugin extends EventEmitter implements IlpPlugin {
   }
   public sendData (data: Buffer): Promise<Buffer> {
     this._log.trace(`Mirrored data: ${data.toString('hex')}`)
-    return this._dataHandler(data)
+    if (this._dataHandler) {
+      return this._dataHandler(data)
+    }
+    throw new Error('No data handler registered')
   }
   public sendMoney (amount: string): Promise<void> {
     this._log.trace(`Mirrored money: ${amount}`)
-    return this._moneyHandler(amount)
+    if (this._moneyHandler) {
+      return this._moneyHandler(amount)
+    }
+    throw new Error('No data handler registered')
   }
   public registerDataHandler (handler: DataHandler) {
     if (this._dataHandler) {
