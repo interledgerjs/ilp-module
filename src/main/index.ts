@@ -101,7 +101,7 @@ export function getModulePrefix (type: string): string {
  */
 function getFromDefaults (type: string): [string | undefined, ModuleConstructorOptions | undefined] {
   if (!knownModules[type] || typeof knownModules[type].loadDefaults !== 'function') {
-    log.warn(`Couldn't load default module name for module of unknown type '${type}'`)
+    log.debug(`No default module for type '${type}'`)
     return [ undefined , undefined ]
   }
   return knownModules[type].loadDefaults()

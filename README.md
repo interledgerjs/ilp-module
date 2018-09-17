@@ -34,39 +34,46 @@ The following built-in modules are provided with this package:
 | log     | debug      | DebugLogger     | Uses the external `debug` module to write logs.                  |
 | log     | console    | ConsoleLogger   | Wraps the appropriate `console` methods                          |
 | store   | in-memory  | InMemoryStore   | A simple in-memory store                                         |
+| plugin  | mirror     | MirrorPlugin    | A plugin that mirrors calls. i.e. sendData invokes dataHandler   |
 | backend | one-to-one | OneToOneBackend | A backend that does no asset conversions but can apply a spread. |
 
 ## Defaults
 
 Known types all have default modules and options defined which will be used if no values are provided or can be found in the environment.
 
-| Type    | Default        |
-|---------|----------------|
-| plugin  | ilp-plugin-btp |
-| log     | debug          |
-| store   | in-memory      |
-| backend | one-to-one     |
+| Type    | Default        | Falback |
+|---------|----------------|---------|
+| plugin  | ilp-plugin-btp | mirror  |
+| log     | debug          | console |
+| store   | in-memory      |         |
+| backend | one-to-one     |         |
 
-**NOTE**: `ilp-plugin-btp` is not a dependency of this package, it must be installed manually if it is used through the default plugin option. Example:
+**NOTE:** As this package is intended to have as few dependencies as possible it will attempt to load the defaults but if these are not built-in and also not found then it will fallback to simple built-in modules.
+
+For example, to use the `ilp-plugin-btp` plugin as a default it must be installed.
 
 ```sh
 > npm install ilp-module ilp-plugin-btp
 ```
-This will allow the following to work seemlessly:
+This will allow the following to work seemlessly and will create and instance of `ilp-plugin-btp`:
 ```js
 const plugin = require('ilp-module').createPlugin()
 ```
 
 ## Loading Algorithm
 
-The name and constructor options of the module are resolved from the supplied parameters, or the appropriate environment variables or finally the defaults are used (see below). Using the resolved name it loads the module in the following ways, in this order:
+The name and constructor options of the module are resolved from the supplied parameters, or the appropriate environment variables, or finally the defaults are used (see above). Using the resolved name it loads the module in the following ways, in this order:
 
  1. If the name matches the `ilp-{type}-{name}` pattern it is loaded as a standard module of that name. 
  2. If not then it will be loaded by path where the path is the result of the following:
 ```js
 path.resolve(process.env['ILP_MODULE_ROOT'] || process.cwd(), `./${type}s/`, resolvedName)
 ```
- 3. Finally it will be attempt to load a built-in module using the resolved name (if the module type is known).
+ 3. Finally it will attempt to load a built-in module using the resolved name (if the module type is known).
+
+### Overriding default modules
+
+The result of this is that an application may provide an alternative implementation of a built-in module by simply providing a module of the same name in the module root. As an example, an application that wishes to use an alternative implementation of the `debug` logger may place a `logger` implementation in the file `./loggers/debug.js` relative to the application working directory (or custom module root specified via `process.env['ILP_MODULE_ROOT']`).
 
 ## Configuration
 
@@ -76,7 +83,16 @@ The module loader can be passed configuration as a parameter or it is loaded fro
 
 Example: Loading a module called `ilp-store-redis` with appropriate options
 ```js
-const store = require('ilp-module').createModule('store', 'ilp-store-redis', { prefix: 'ilp', port: 6379 })
+const store = require('ilp-module').createStore('ilp-store-redis', { prefix: 'ilp', port: 6379 })
+```
+Example: Loading the same module using environment variabales.
+```js
+//These would usually be set outside the application
+process.env['ILP_STORE'] = 'ilp-store-redis'
+process.env['ILP_STORE_OPTIONS'] = '{"prefix": "ilp", "port": "6379" }'
+
+// The following would load the module name and options from the env variables
+const store = require('ilp-module').createStore()
 ```
 ### Required Options
 
@@ -86,9 +102,13 @@ In general the constructor options are simply an object however some types have 
 - store: `{ prefix: 'key-prefix'}`
 - backend: `{ spread: 0.01}` 
 
+These are enforced if using TypeScript and overriding the known-module interfaces (`IlpPlugin`, `IlpLogger`, `IlpBackend` and `IlpStore`) or using the convenience functions (`createPlugin()` etc).
+
+For all modules except the `logger` a `logger` instances is expected as one of the services. The loader will determine an apporpriate namespace and call `createLogger()` if one is not provided.
+
 ## Usage
 
-A full blown call to the loader loks as follows. Only `type` is required.
+A full blown call to the loader looks as follows. (Note: Only `type` is required.)
 
 ```js
 const type = 'store' // Or 'logger', 'backend', 'plugin'
@@ -104,11 +124,27 @@ There are convenience functions for known modules,:
 const plugin = require('ilp-module').createLogger(namespace)
 const plugin = require('ilp-module').createCustomLogger(name?, options?, services?)
 const plugin = require('ilp-module').createPlugin(name?, options?, services?)
+const plugin = require('ilp-module').createStore(name?, options?, services?)
 const plugin = require('ilp-module').createBackend(name?, options?, services?)
 ```
 
 ## Developers
 
-Module developers can depend on this package and use the provided type definitions.
+Module developers can depend on this package and use the provided type definitions to develop their own instances of known module types or custom modules.
 
 Modules can either be published as standalone packages (and should be appropriately named: `ilp-{type}-{name}`) or can be put into a local folder in the application (`./{type}s/{name}.js`).
+
+## Example
+
+For a deeper insight into how the package is used run the example and look at the tests.
+
+Run the example from the `example` folder (note that it loads a custom module from the `widgets` folder):
+```sh
+example> node app.js
+```
+Or run it from the root but specify the module root:
+```sh
+> ILP_MODULE_ROOT=$PWD/example node example/app.js
+```
+
+Note the different behaviour if the `debug` and `ilp-plugin-btp` modules are available or not.
