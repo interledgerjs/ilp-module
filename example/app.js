@@ -1,11 +1,11 @@
 
-const ilp = require('..')
+const loader = require('..')
+
+// Uses built-in mirror plugin unless ilp-plugin-btp is available
+const plugin = loader.createPlugin()
 
 //Load the custom module type 'widget' from the app's CWD
-const greeter = ilp.createModule('widget', 'my-widget', {greeting: 'World'})
-
-// Uses built-in mirror plugin unless ilp-plugin-btp is available (in which case)
-const plugin = ilp.createPlugin()
+const greeter = loader.createModule('widget', 'my-widget', {greeting: 'World'})
 
 async function run () {
   greeter.hello(`ILP_MODULE_ROOT=${process.env['ILP_MODULE_ROOT']}`)
