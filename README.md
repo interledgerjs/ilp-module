@@ -57,7 +57,7 @@ For example, to use the `ilp-plugin-btp` plugin as a default it must be installe
 ```
 This will allow the following to work seemlessly and will create and instance of `ilp-plugin-btp`:
 ```js
-const plugin = require('ilp-module').createPlugin()
+const plugin = require('ilp-module-loader').createPlugin()
 ```
 
 ## Loading Algorithm
@@ -83,7 +83,7 @@ The module loader can be passed configuration as a parameter or it is loaded fro
 
 Example: Loading a module called `ilp-store-redis` with appropriate options
 ```js
-const store = require('ilp-module').createStore('ilp-store-redis', { prefix: 'ilp', port: 6379 })
+const store = require('ilp-module-loader').createStore('ilp-store-redis', { prefix: 'ilp', port: 6379 })
 ```
 Example: Loading the same module using environment variabales.
 ```js
@@ -92,7 +92,7 @@ process.env['ILP_STORE'] = 'ilp-store-redis'
 process.env['ILP_STORE_OPTIONS'] = '{"prefix": "ilp", "port": "6379" }'
 
 // The following would load the module name and options from the env variables
-const store = require('ilp-module').createStore()
+const store = require('ilp-module-loader').createStore()
 ```
 ### Required Options
 
@@ -114,18 +114,18 @@ A full blown call to the loader looks as follows. (Note: Only `type` is required
 const type = 'store' // Or 'logger', 'backend', 'plugin'
 const name = 'ilp-store-redis' // Optional
 const options = { prefix: 'ilp', port: 6379 } // Specific to implementation. Some types have required options.
-const services = { log: require('ilp-module').createLogger()}
-const module = require('ilp-module').createModule(type, name, options, services)
+const services = { log: require('ilp-module-loader').createLogger()}
+const module = require('ilp-module-loader').createModule(type, name, options, services)
 ```
 
 There are convenience functions for known modules,:
 
 ```js
-const plugin = require('ilp-module').createLogger(namespace)
-const plugin = require('ilp-module').createCustomLogger(name?, options?, services?)
-const plugin = require('ilp-module').createPlugin(name?, options?, services?)
-const plugin = require('ilp-module').createStore(name?, options?, services?)
-const plugin = require('ilp-module').createBackend(name?, options?, services?)
+const plugin = require('ilp-module-loader').createLogger(namespace)
+const plugin = require('ilp-module-loader').createCustomLogger(name?, options?, services?)
+const plugin = require('ilp-module-loader').createPlugin(name?, options?, services?)
+const plugin = require('ilp-module-loader').createStore(name?, options?, services?)
+const plugin = require('ilp-module-loader').createBackend(name?, options?, services?)
 ```
 
 ## Developers
