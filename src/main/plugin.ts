@@ -1,7 +1,6 @@
 import * as crypto from 'crypto'
 import { EventEmitter } from 'events'
 import { ModuleTypeGuard, ModuleDefaultLoader } from '.'
-require('source-map-support').install()
 
 interface FunctionWithVersion extends Function {
   version?: number

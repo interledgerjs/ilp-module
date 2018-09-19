@@ -5,12 +5,12 @@ require('source-map-support').install()
 export default class MockBackend implements IlpBackend {
 
     public spread: number
-    public getInfo: (accountId: string) => AccountInfo | undefined
+    public getInfo?: (accountId: string) => AccountInfo | undefined
     public log: IlpLogger
 
     constructor(options: BackendOptions, services: BackendServices) {
         this.spread = options.spread
-        this.getInfo = services.getInfo
+        this.getInfo = services.getInfo 
         this.log = services.log
     }
     connect(): Promise<void> {

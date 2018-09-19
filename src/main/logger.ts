@@ -1,5 +1,4 @@
 import { ModuleDefaultLoader, ModuleTypeGuard, ModuleConstructorOptions } from '.'
-require('source-map-support').install()
 
 export type LogWriter = (formatter: any, ...args: any[]) => void
 

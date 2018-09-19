@@ -1,6 +1,6 @@
 {
-  "name": "ilp-module",
-  "version": "0.1.0",
+  "name": "ilp-module-loader",
+  "version": "0.0.0",
   "description": "ILP module loader",
   "main": "lib/main/index.js",
   "types": "lib/main/index.d.ts",
@@ -26,13 +26,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/interledgerjs/ilp-module.git"
+    "url": "git+https://github.com/interledgerjs/ilp-module-loader.git"
   },
   "author": "Interledger Team <info@interledger.org>",
   "license": "Apache-2.0",
   "dependencies": {
-    "bignumber.js": "^7.2.1",
-    "source-map-support": "^0.5.9"
+    "bignumber.js": "^7.2.1"
   },
   "devDependencies": {
     "@types/chai": "^4.1.4",
@@ -50,6 +49,7 @@
     "mocha-typescript": "^1.1.14",
     "nyc": "^12.0.2",
     "sinon": "^6.0.1",
+    "source-map-support": "^0.5.9",
     "tslint": "^5.11.0",
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.12.0",

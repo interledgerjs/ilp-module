@@ -1,5 +1,4 @@
 import { IlpLogger, LoggerOptions, LogWriter } from '../logger'
-require('source-map-support').install()
 
 export default class ConsoleLogger implements IlpLogger {
   public readonly namespace: string

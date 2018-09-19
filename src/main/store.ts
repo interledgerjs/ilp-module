@@ -1,5 +1,4 @@
 import { ModuleTypeGuard, ModuleDefaultLoader, ModuleConstructorOptions } from '.'
-require('source-map-support').install()
 
 export interface StoreOptions extends ModuleConstructorOptions {
   prefix: string

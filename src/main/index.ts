@@ -1,5 +1,4 @@
 import * as path from 'path'
-require('source-map-support').install()
 
 /**
  * Load known module types

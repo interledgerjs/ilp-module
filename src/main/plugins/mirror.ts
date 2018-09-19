@@ -2,7 +2,6 @@ import { DataHandler, MoneyHandler, IlpPlugin, PluginConnectOptions } from '../p
 import { IlpLogger } from '../logger'
 import { ModuleConstructorOptions, ModuleServices } from '..'
 import { EventEmitter } from 'events'
-require('source-map-support').install()
 
 export default class MirrorPlugin extends EventEmitter implements IlpPlugin {
   static version = 2

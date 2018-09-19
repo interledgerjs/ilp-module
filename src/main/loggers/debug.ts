@@ -1,6 +1,5 @@
 import * as debug from 'debug'
 import { IlpLogger, LoggerOptions, LogWriter } from '../logger'
-require('source-map-support').install()
 
 export default class DebugLogger implements IlpLogger {
   public readonly namespace: string

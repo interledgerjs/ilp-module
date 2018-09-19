@@ -1,10 +1,17 @@
 import { ModuleConstructorOptions, ModuleServices, ModuleDefaultLoader, ModuleTypeGuard } from '.'
-require('source-map-support').install()
 
 export interface AccountInfo {
   relation: 'parent' | 'peer' | 'child',
   assetCode: string,
   assetScale: number,
+}
+
+/**
+ * An asset/currency including the code used to identify it (e.g. ISO4017 currency code) and scale
+ */
+export interface AssetInfo {
+  scale: number
+  code: string
 }
 
 export interface SubmitPaymentParams {
@@ -16,12 +23,12 @@ export interface SubmitPaymentParams {
 
 /** API exposed by the connector to its backends */
 export interface BackendServices extends ModuleServices {
-  getInfo: (accountId: string) => AccountInfo | undefined
+  getInfo?: (accountId: string) => AccountInfo | undefined
 }
 
 export interface IlpBackend {
   connect (): Promise<void>
-  getRate (sourceAccount: string, destinationAccount: string): Promise<number>
+  getRate (sourceAccount: string | AssetInfo, destinationAccount: string | AssetInfo): Promise<number>
   submitPayment (params: SubmitPaymentParams): Promise<void>
 }
 

@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { IlpLogger } from '../logger'
 import { AccountInfo, BackendOptions, IlpBackend, BackendServices } from '../backend'
-require('source-map-support').install()
 
 /**
  * Backend which trades everything one-to-one (plus a spread).
@@ -18,8 +17,14 @@ export default class OneToOneBackend implements IlpBackend {
    */
   constructor (options: BackendOptions, services: BackendServices) {
     this.spread = options.spread || 0
-    this.getInfo = services.getInfo
     this.log = services.log
+
+    if (services.getInfo) {
+      this.getInfo = services.getInfo
+    } else {
+      throw new Error('OneToOneBackend requires a backend service for getting account info.')
+    }
+
   }
 
   /**

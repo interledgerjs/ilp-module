@@ -1,5 +1,4 @@
 import { IlpStore } from '../store'
-require('source-map-support').install()
 
 export default class InMemoryStore implements IlpStore {
   protected _store: Map<string, string>
