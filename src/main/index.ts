@@ -5,11 +5,11 @@ import * as path from 'path'
  */
 
 // Logs
-import { IlpLogger, LogWriter, LoggerOptions } from './logger'
+import { isValidInstance as isValidLogger, IlpLogger, LogWriter, LoggerOptions } from './logger'
 // tslint:disable-next-line:no-duplicate-imports
 import * as logger from './logger'
 export {
-  IlpLogger, LogWriter, LoggerOptions
+  isValidLogger, IlpLogger, LogWriter, LoggerOptions
 }
 export const createLogger = (namespace: string) => {
   return createModule('logger', undefined, { namespace }) as IlpLogger
@@ -19,34 +19,34 @@ export const createCustomLogger = (name: string, options?: ModuleConstructorOpti
 }
 
 // Stores
-import { IlpStore, StoreOptions } from './store'
+import { isValidInstance as isValidStore, IlpStore, StoreOptions } from './store'
 // tslint:disable-next-line:no-duplicate-imports
 import * as store from './store'
 export {
-  IlpStore, StoreOptions
+  isValidStore, IlpStore, StoreOptions
 }
 export const createStore = (name?: string, options?: ModuleConstructorOptions, services?: ModuleServices) => {
   return createModule('store', name, options, services) as IlpStore
 }
 
 // Plugins
-import { PluginConnectOptions, DataHandler, MoneyHandler, IlpPlugin } from './plugin'
+import { isValidInstance as isValidPlugin, PluginConnectOptions, DataHandler, MoneyHandler, IlpPlugin } from './plugin'
 // tslint:disable-next-line:no-duplicate-imports
 import * as plugin from './plugin'
 export {
-  PluginConnectOptions, DataHandler, MoneyHandler, IlpPlugin
+  isValidPlugin, PluginConnectOptions, DataHandler, MoneyHandler, IlpPlugin
 }
 export const createPlugin = (name?: string, options?: ModuleConstructorOptions, services?: ModuleServices) => {
   return createModule('plugin', name, options, services) as IlpPlugin
 }
 
 // Backends
-import { AccountInfo, BackendOptions, BackendServices, IlpBackend } from './backend'
+import { isValidInstance as isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, IlpBackend, SubmitPaymentParams } from './backend'
 // tslint:disable-next-line:no-duplicate-imports
 import * as backend from './backend'
 import ConsoleLogger from './loggers/console'
 export {
-  AccountInfo, BackendOptions, BackendServices, IlpBackend
+  isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, IlpBackend, SubmitPaymentParams
 }
 export const createBackend = (name?: string, options?: BackendOptions, services?: BackendServices) => {
   return createModule('backend', name, options, services) as IlpBackend
