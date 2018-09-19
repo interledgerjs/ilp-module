@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { IlpLogger } from '../logger'
-import { AccountInfo, BackendOptions, IlpBackend, BackendServices } from '../backend'
+import { AccountInfo, BackendOptions, IlpBackend, BackendServices, AssetInfo } from '../backend'
 
 /**
  * Backend which trades everything one-to-one (plus a spread).
  */
 export default class OneToOneBackend implements IlpBackend {
   protected spread: number
-  protected getInfo: (accountId: string) => AccountInfo | undefined
+  protected getInfo?: (accountId: string) => AccountInfo | undefined
   protected log: IlpLogger
 
   /**
@@ -18,13 +18,7 @@ export default class OneToOneBackend implements IlpBackend {
   constructor (options: BackendOptions, services: BackendServices) {
     this.spread = options.spread || 0
     this.log = services.log
-
-    if (services.getInfo) {
-      this.getInfo = services.getInfo
-    } else {
-      throw new Error('OneToOneBackend requires a backend service for getting account info.')
-    }
-
+    this.getInfo = services.getInfo
   }
 
   /**
@@ -43,20 +37,39 @@ export default class OneToOneBackend implements IlpBackend {
    * @param sourceAccount The account ID of the previous party
    * @param destinationAccount The account ID of the next hop party
    */
-  async getRate (sourceAccount: string, destinationAccount: string) {
-    const sourceInfo = this.getInfo(sourceAccount)
-    const destinationInfo = this.getInfo(destinationAccount)
+  async getRate (sourceAccount: string | AssetInfo, destinationAccount: string | AssetInfo) {
 
-    if (!sourceInfo) {
-      this.log.error('unable to fetch account info for source account. accountId=%s', sourceAccount)
-      throw new Error('unable to fetch account info for source account. accountId=' + sourceAccount)
-    }
-    if (!destinationInfo) {
-      this.log.error('unable to fetch account info for destination account. accountId=%s', destinationAccount)
-      throw new Error('unable to fetch account info for destination account. accountId=' + destinationAccount)
+    let sourceScale
+    if (typeof(sourceAccount) === 'string') {
+      if (this.getInfo) {
+        const sourceInfo = this.getInfo(sourceAccount)
+        if (!sourceInfo) {
+          throw new Error(`Unable to fetch account info for source account. accountId=${sourceAccount}`)
+        }
+        sourceScale = sourceInfo.assetScale
+      } else {
+        throw new Error(`Unable to fetch account info. Required service 'getInfo()' is not defined.`)
+      }
+    } else {
+      sourceScale = sourceAccount.scale
     }
 
-    const scaleDiff = destinationInfo.assetScale - sourceInfo.assetScale
+    let destinationScale
+    if (typeof(destinationAccount) === 'string') {
+      if (this.getInfo) {
+        const destinationInfo = this.getInfo(destinationAccount)
+        if (!destinationInfo) {
+          throw new Error(`Unable to fetch account info for destination account. accountId=${sourceAccount}`)
+        }
+        destinationScale = destinationInfo.assetScale
+      } else {
+        throw new Error(`Unable to fetch account info. Required service 'getInfo()' is not defined.`)
+      }
+    } else {
+      destinationScale = destinationAccount.scale
+    }
+
+    const scaleDiff = destinationScale - sourceScale
     // The spread is subtracted from the rate when going in either direction,
     // so that the DestinationAmount always ends up being slightly less than
     // the (equivalent) SourceAmount -- regardless of which of the 2 is fixed:

@@ -60,6 +60,16 @@ describe('Built-in modules: OneToOneBackend', function () {
     await Chai.expect(backend.getRate('alice','bob')).to.be.rejected
   })
 
+  it('should throw with no getInfo() service if given account data', async function () {
+    const backend = createBackend('one-to-one')
+    await Chai.expect(backend.getRate('alice','bob')).to.be.rejected
+  })
+
+  it('should return a 1:1 rate (no getInfo() service)', async function () {
+    const backend = createBackend('one-to-one')
+    assert.eventually.equal(backend.getRate({code: 'USD', scale: 2},{code: 'USD', scale: 2}), 1)
+  })
+
   it('should throw with bad destination account data', async function () {
     const backend = createBackend('one-to-one', {
       spread: 0
