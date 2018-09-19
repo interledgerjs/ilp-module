@@ -1,9 +1,9 @@
 # ILP Module Loader
 > An ILP module loader and type definitions for common types
 
-[![NPM Package](https://img.shields.io/npm/v/ilp-module.svg?style=flat)](https://npmjs.org/package/ilp-module)
-[![CircleCI](https://circleci.com/gh/interledgerjs/ilp-module.svg?style=shield)](https://circleci.com/gh/interledgerjs/ilp-module)
-[![Known Vulnerabilities](https://snyk.io/test/github/interledgerjs/ilp-module/badge.svg)](https://snyk.io/test/github/interledgerjs/ilp-module)
+[![NPM Package](https://img.shields.io/npm/v/ilp-module-loader.svg?style=flat)](https://npmjs.org/package/ilp-module-loader)
+[![CircleCI](https://circleci.com/gh/interledgerjs/ilp-module-loader.svg?style=shield)](https://circleci.com/gh/interledgerjs/ilp-module-loader)
+[![Known Vulnerabilities](https://snyk.io/test/github/interledgerjs/ilp-module-loader/badge.svg)](https://snyk.io/test/github/interledgerjs/ilp-module-loader)
 
 The Interledger.js project has established a convention for pluggable code modules. Various components use pluggable modules which are loaded either as ES modules or from the application source code.
 
