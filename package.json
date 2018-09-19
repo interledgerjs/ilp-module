@@ -1,6 +1,6 @@
 {
   "name": "ilp-module-loader",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "ILP module loader",
   "main": "lib/main/index.js",
   "types": "lib/main/index.d.ts",
