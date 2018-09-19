@@ -50,3 +50,43 @@ export const loadDefaults: ModuleDefaultLoader = () => {
     }
   ]
 }
+
+export function getAssetInfo (sourceAccount: string | AssetInfo, destinationAccount: string | AssetInfo, getInfo?: BackendServices['getInfo']) {
+  let sourceAssetInfo: AssetInfo
+  if (typeof (sourceAccount) === 'string') {
+    if (getInfo) {
+      const sourceInfo = getInfo(sourceAccount)
+      if (!sourceInfo) {
+        throw new Error(`Unable to fetch account info for source account. accountId=${sourceAccount}`)
+      }
+      sourceAssetInfo = {
+        scale: sourceInfo.assetScale,
+        code: sourceInfo.assetCode
+      }
+    } else {
+      throw new Error(`Unable to fetch account info. Required service 'getInfo()' is not defined.`)
+    }
+  } else {
+    sourceAssetInfo = sourceAccount
+  }
+
+  let destinationAssetInfo: AssetInfo
+  if (typeof (destinationAccount) === 'string') {
+    if (getInfo) {
+      const destinationInfo = getInfo(destinationAccount)
+      if (!destinationInfo) {
+        throw new Error(`Unable to fetch account info for destination account. accountId=${sourceAccount}`)
+      }
+      destinationAssetInfo = {
+        scale: destinationInfo.assetScale,
+        code: destinationInfo.assetCode
+      }
+    } else {
+      throw new Error(`Unable to fetch account info. Required service 'getInfo()' is not defined.`)
+    }
+  } else {
+    destinationAssetInfo = destinationAccount
+  }
+
+  return [sourceAssetInfo, destinationAssetInfo]
+}

@@ -65,6 +65,11 @@ describe('Built-in modules: OneToOneBackend', function () {
     await Chai.expect(backend.getRate('alice','bob')).to.be.rejected
   })
 
+  it('should throw if given source and destination codes differ', async function () {
+    const backend = createBackend('one-to-one')
+    await Chai.expect(backend.getRate({code: 'USD', scale: 2},{code: 'EUR', scale: 2})).to.be.rejected
+  })
+
   it('should return a 1:1 rate (no getInfo() service)', async function () {
     const backend = createBackend('one-to-one')
     assert.eventually.equal(backend.getRate({code: 'USD', scale: 2},{code: 'USD', scale: 2}), 1)
