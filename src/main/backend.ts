@@ -51,7 +51,8 @@ export const loadDefaults: ModuleDefaultLoader = () => {
   ]
 }
 
-export function getAssetInfo (sourceAccount: string | AssetInfo, destinationAccount: string | AssetInfo, getInfo?: BackendServices['getInfo']) {
+export function getAssetInfo (sourceAccount: string | AssetInfo, destinationAccount: string | AssetInfo,
+  getInfo?: BackendServices['getInfo']): [ AssetInfo, AssetInfo ] {
   let sourceAssetInfo: AssetInfo
   if (typeof (sourceAccount) === 'string') {
     if (getInfo) {

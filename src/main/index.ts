@@ -41,12 +41,12 @@ export const createPlugin = (name?: string, options?: ModuleConstructorOptions, 
 }
 
 // Backends
-import { isValidInstance as isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, IlpBackend, SubmitPaymentParams } from './backend'
+import { isValidInstance as isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, getAssetInfo, IlpBackend, SubmitPaymentParams } from './backend'
 // tslint:disable-next-line:no-duplicate-imports
 import * as backend from './backend'
 import ConsoleLogger from './loggers/console'
 export {
-  isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, IlpBackend, SubmitPaymentParams
+  isValidBackend, AssetInfo, AccountInfo, BackendOptions, BackendServices, getAssetInfo, IlpBackend, SubmitPaymentParams
 }
 export const createBackend = (name?: string, options?: BackendOptions, services?: BackendServices) => {
   return createModule('backend', name, options, services) as IlpBackend
